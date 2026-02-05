@@ -5626,7 +5626,18 @@
                         tileNr:tileInfo[4],
                         imageNr:tileInfo[5],
                         imageUsageCount:tileInfo[6],
-                        imageUrl:tileInfo[7],
+                        imageUrl: (function () {
+    var url = tileInfo[7];
+    if (!url) return null;
+
+    // AndreaMosaic writes local file:/// paths. Those break on GitHub Pages.
+    if (url.startsWith("file:///")) {
+        return "originals/" + tileInfo[8] + "." + tileInfo[9];
+    }
+
+    // If it’s already an http(s) URL, keep it.
+    return url;
+})(),
                         imageName:tileInfo[8],
                         imageExtension:tileInfo[9],
                     };
